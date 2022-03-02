@@ -33,9 +33,8 @@ header = """
 <h1>Busted Stuff Report</h1>
 <i>Compiled on: """
 
-# Setting up timestamp for HTML report
+# Setting up datestamp for HTML report
 datestamp = datetime.date.today().strftime("%d-%m-%y")
-#timestamp = datetime.date.today().strftime("%d-%m-%y") -- for future development.
 
 # Writing HTML header to file:
 with open(htmlreportname, 'w') as f:
@@ -48,19 +47,12 @@ footer = """<br><br><b>Ending Busted Stuff testing.
 <br><br>Thanks for using the Busted Stuff Report!</b></body></html>"""
 
 # Setting up variables for URL retrieval
-# response = "A string to catch the HTML data from the URL location"
-# html = "Another string to store the HTML data" 
-# sessionduration = "A count of the hours and minutes the session ran for."
-# linktesttotal = 0  # "A counter of the number of links tested."
-# errorcount = 0  # "A counter of the number of errors found."
-
-# List of general varables in use
 # e is a variable that catches HTTP error codes that come back
 response = "A string to catch the HTML data from the URL location"
-html = "."
-sessionduration = 0
-linktesttotal = 0
-errorcount = 0
+html = "." # Another string to store the HTML data.
+sessionduration = 0 # A count of the hours and minutes the session ran for.
+linktesttotal = 0 # A count of the number of links tested.
+errorcount = 0 # A count of the number of errors found.
 
 # Setting up the regex strings that will be scanned on each page. 
 # These are specific text strings found in Confluence errors, that show up in the source of the page. 
@@ -72,10 +64,10 @@ bustedjiraissuesregex = re.compile("error\">jiraissues\:")
 bustedloginregex = re.compile("<title>Log In")
 
 # Setting Confluence URL, Space, username and password.
-server = 'http://confluence.atlassian.com'
-conf_user = 'username'
-conf_pwd = 'password'
-conf_space = 'SPACENAME'
+server = 'http://confluence.atlassian.com' #replace with your public Confluence server URL
+conf_user = 'username' # Enter your Confluence user name (not stored in version control)
+conf_pwd = 'password'  # Enter your Confluence password (not stored in version control)
+conf_space = 'SPACENAME' # The name of the Confluence "space" (content area) that you want to scan.
 with open(htmlreportname, 'a') as f:
     f.write("<br><i>Scanning URL:<b> ")
     f.write(server)
@@ -123,9 +115,6 @@ for page_summary in spaceindex:
     # e.read is the HTML source of the 404 page. Line below prints that to console.
         print e.read() 
     #END HTTP error finder block
-    # OPTIONAL -- spit the retrieved HTML into the console window or feed it into the log file
-    #print html
-    #logging.info(html)
     # REGEX FUNCTION
     # These actions process the HTML retrieved and searches for the Confluence Error CSS.
     print "Testing for signs of errors..."
@@ -260,6 +249,7 @@ for page_summary in spaceindex:
 
 # (end FOR MAIN PROGRAM)
 
+# Mop-up section
 # This sends summary information to the console and seals off entries in the log file.
 
 print " "
@@ -269,10 +259,6 @@ print linktesttotal, "link(s) were tested.", errorcount, "error(s) were found."
 print "Busted Stuff was recorded in the HTML report:", htmlreportname
 print "And in the logfile:", logfilename
 summarytotal = (linktesttotal, "link(s) were tested.", errorcount, "error(s) were found.")
-#errortotal = " ", errorcount, " "
-
-#if errorcount < 1
-#    scansummary = "Incredibly, no errors were found!"
 
 with open(htmlreportname, 'a') as f:
     f.write("<br><i>If there's no links above, then no errors were found! See the .log file for a detailed record of the scan.")
